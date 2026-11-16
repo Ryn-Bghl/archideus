@@ -1,20 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProductController!{% endblock %}
+{% block title %}Nos plantes{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #DAD7CD; color: #344E41; padding: 2px 6px; }
-</style>
+    <main class="product-list">
+        <h1>Nos plantes</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/rayan/Documents/BUT MMI/DEV WEB/S5/symfony/archideus/src/Controller/ProductController.php</code></li>
-        <li>Your template at <code>C:/Users/rayan/Documents/BUT MMI/DEV WEB/S5/symfony/archideus/templates/product/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="product-grid">
+            {% for product in products %}
+                <article class="product-card">
+                    <p class="product-category">{{ product.category.name }}</p>
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.description }}</p>
+                    <p class="product-care">Entretien : {{ product.careLevel ?? 'Non renseigné' }}</p>
+                    <p class="product-price">{{ (product.price / 100)|number_format(2, ',', ' ') }} €</p>
+                    <p>Stock : {{ product.stock }}</p>
+                </article>
+            {% else %}
+                <p>Aucune plante disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </main>
 {% endblock %}
