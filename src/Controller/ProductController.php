@@ -17,10 +17,11 @@ final class ProductController extends AbstractController
     }
 
     #[Route("/product/{slug}", name: "app_product")]
-    public function show(): Response
+    public function show(string $slug): Response
     {
         return $this->render("product/index.html.twig", [
             "controller_name" => "ProductController",
+            "slug" => $slug,
         ]);
     }
 }
