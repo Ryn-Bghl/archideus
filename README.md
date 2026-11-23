@@ -88,6 +88,4 @@ Exemple de configuration utilisée (Windows) :
 **Extensions PHP obligatoires** : `intl` , `mbstring` , `curl` , `zip` , `xml` , `ctype` , `iconv` ,
 `openssl` , `fileinfo` , `gd` , `pdo_mysql` .
 
-### INSTALLER `ctype` & `iconv`, il semble qu'il ne sont pas dans php.ini.
-
 Symfony 8.0 n’est plus maintenue : choisissez la **7.4 LTS** ou la **8.1**.
