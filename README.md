@@ -1,91 +1,114 @@
-# Projet Symfony : boutique e-commerce de plantes
+# Archideus — boutique de plantes
 
-### Sujet, consignes et guide pas à pas pour les étudiants
+Projet de boutique en ligne de plantes réalisé avec Twig et Doctrine. Le **framework Symfony du projet est en version 8.1** et nécessite **PHP 8.4 ou supérieur**. Symfony CLI est un outil séparé qui sert notamment à lancer le serveur local ; sa version (par exemple 5.16) n’est pas la version du framework.
 
-## 1. Présentation du sujet
+À ce stade, le projet contient une page d’accueil, un catalogue, des fiches produit et des fixtures de démonstration. Les comptes clients, le panier, les commandes et l’administration décrits dans `CONSIGNES.md` restent à développer. Il n’y a donc pas encore de compte de test.
 
-Vous devez réaliser un **site e-commerce de vente de plantes** avec le framework **Symfony**,
-une **base de données MySQL/MariaDB** et le moteur de templates **Twig**. Le site permet à
-un visiteur de parcourir un catalogue de plantes, de les filtrer, de consulter une fiche
-détaillée et de remplir un panier. Les clients pourront ensuite créer un compte, passer
-commande et payer en ligne. Un administrateur gère le catalogue depuis un back-office.
+## Prérequis
 
-### Objectifs pédagogiques
+- PHP 8.4 ou supérieur, avec les extensions `ctype`, `iconv`, `intl`, `mbstring`, `curl`, `zip`, `xml`, `openssl`, `fileinfo`, `gd` et `pdo_mysql`.
+- Composer 2.
+- Git.
+- Docker Desktop et Docker Compose pour démarrer la base de données et phpMyAdmin avec la configuration fournie.
+- Symfony CLI pour lancer le serveur de développement (recommandé).
 
-- Installer et vérifier un environnement de développement PHP/Symfony.
-- Concevoir un modèle de données (entités, relations) avec Doctrine.
-- Gérer le schéma de la base avec les migrations et les fixtures.
-- Créer des contrôleurs, des routes et des vues Twig.
-- Gérer un panier en session avec un service dédié.
-- Mettre en place l’authentification, les rôles et la sécurité (CSRF).
-- Découvrir un paiement en ligne et un back-office.
+Vérifier PHP et ses extensions :
 
-## 2. Cahier des charges
+```powershell
+php -v
+php -m
+composer --version
+docker compose version
+symfony -v
+```
 
-### Fonctionnalités obligatoires
+Le projet utilise Symfony AssetMapper ; **Node.js n’est pas nécessaire** pour l’installation actuelle.
 
-| N°  | Fonctionnalité  | Détail                                                                  |
-| --- | --------------- | ----------------------------------------------------------------------- |
-| 1   | Catalogue       | Liste des plantes, recherche par nom, filtre par catégorie              |
-| 2   | Fiche produit   | Description, prix, stock, entretien, exposition,arrosage                |
-| 3   | Accueil         | Présentation et plantes mises en avant                                  |
-| 4   | Panier          | Ajouter, diminuer, supprimer, vider, total, vérification du stock       |
-| 5   | Comptes clients | Inscription, connexion, déconnexion                                     |
-| 6   | Commande        | Formulaire de livraison, enregistrement de la commande et de ses lignes |
-| 7   | Espace client   | Historique des commandes                                                |
-| 8   | Administration  | Gestion des produits, catégories et commandes (rôle ROLE_ADMIN)         |
+## Installation sous Windows
 
-### Fonctionnalités bonus
+### 1. Récupérer le projet
 
-- Paiement avec Stripe Checkout et webhook de confirmation.
-- Upload de photos des plantes (VichUploaderBundle).
-- Pagination du catalogue et filtres avancés (prix, exposition).
-- Envoi d’un email de confirmation (Symfony Mailer).
-- Pages légales : CGV, mentions légales, RGPD, cookies.
-- Tests automatisés avec PHPUnit.
-- SEO : balises meta, sitemap.
+```powershell
+git clone https://github.com/Ryn-Bghl/archideus.git
+cd archideus
+```
 
-### Contraintes techniques
+### 2. Installer les dépendances PHP
 
-- Symfony **7.4 LTS** (PHP 8.2 minimum) ou **8.1** (PHP 8.4 minimum).
-- Base de données MySQL/MariaDB gérée par Doctrine ORM.
-- Prix stockés en **centimes** (entier) pour éviter les erreurs d’arrondi.
-- Formulaires protégés par un **jeton CSRF**.
-- Code versionné avec **Git** (commits réguliers, messages clairs).
+```powershell
+composer install
+```
 
-## 3. Livrables et évaluation
+### 3. Démarrer MySQL et phpMyAdmin
 
-**Livrables** : le dépôt Git du projet, un fichier `README.md` (installation, comptes de test), un
-export de la base ou les fixtures, et une courte démonstration orale.
+Lancer Docker Desktop, puis depuis la racine du projet :
 
-| Critère                                            | Points |
-| -------------------------------------------------- | ------ |
-| Environnement et installation documentée           | 2      |
-| Modèle de données (entités, relations, migrations) | 4      |
-| Catalogue, fiche produit, accueil                  | 4      |
-| Panier                                             | 4      |
-| Authentification et sécurité                       | 3      |
-| Commande et espace client                          | 3      |
-| Back-office                                        | 3      |
-| Qualité du code et du Git                          | 2      |
-| Bonus (paiement, upload, tests...)                 | +2     |
+```powershell
+docker compose up -d
+```
 
-Barème indicatif, à adapter par l’enseignant.
+La configuration de développement démarre MySQL 8 et phpMyAdmin. Les adresses et paramètres de connexion sont définis dans `compose.yaml`. Consultez ce fichier pour configurer votre environnement local ; les identifiants ne sont pas recopiés dans ce README.
 
-## 4. Environnement requis
+phpMyAdmin est disponible à l’adresse locale indiquée par le port publié dans `compose.yaml`. Les identifiants configurés pour le développement local ne doivent pas être réutilisés en production.
 
-Exemple de configuration utilisée (Windows) :
+### 4. Configurer la connexion à la base
 
-| Outil           | Version utilisée | Détail                                 |
-| --------------- | ---------------- | -------------------------------------- |
-| PHP             | 8.5.11           | 8.2 (Symfony 7.4) ou 8.4 (Symfony 8.x) |
-| Composer        | 2.10             | 2.x                                    |
-| Symfony CLI     | 5.20             | à jour                                 |
-| Git             | 2.47             | 2.x                                    |
-| Node.js         | 22               | optionnel                              |
-| MariaDB (XAMPP) | 10.4.32          | MySQL 8 / MariaDB 10.4+                |
+Ouvrir ou créer `.env.local` à la racine du projet :
 
-**Extensions PHP obligatoires** : `intl` , `mbstring` , `curl` , `zip` , `xml` , `ctype` , `iconv` ,
-`openssl` , `fileinfo` , `gd` , `pdo_mysql` .
+```powershell
+notepad .env.local
+```
 
-Symfony 8.0 n’est plus maintenue : choisissez la **7.4 LTS** ou la **8.1**.
+Ajouter cette ligne en remplaçant les champs par les valeurs de `compose.yaml` :
+
+```dotenv
+DATABASE_URL="mysql://{utilisateur}:{mot_de_passe}@{hote}:{port}/{nom_de_base}?serverVersion={version_mysql}&charset=utf8mb4"
+```
+
+`utilisateur` et `mot_de_passe` sont les identifiants de la base ; `hote` et `port` son adresse ; `nom_de_base` et `version_mysql` désignent la base et la version MySQL. `.env.local` est ignoré par Git : ne le commitez pas.
+
+### 5. Créer le schéma et charger les données de démonstration
+
+```powershell
+php bin/console doctrine:migrations:migrate --no-interaction
+php bin/console doctrine:fixtures:load --no-interaction
+```
+
+La commande des fixtures **efface les données existantes** avant de charger les catégories et plantes de démonstration.
+
+### 6. Lancer l’application
+
+```powershell
+symfony serve
+```
+
+Ouvrir l’adresse affichée par Symfony CLI, généralement <https://127.0.0.1:8000>. Pour arrêter le serveur, utilisez `Ctrl+C`.
+
+## Commandes utiles
+
+```powershell
+# Vérifier la connexion à la base
+php bin/console doctrine:query:sql "SELECT 1"
+
+# Afficher les routes de l’application
+php bin/console debug:router
+
+# Exécuter les tests automatisés
+php bin/phpunit
+
+# Arrêter les conteneurs sans supprimer les données locales
+docker compose down
+```
+
+Les tests qui accèdent à la base nécessitent une base de test configurée séparément de la base de développement. Ne lancez pas de tests contre des données importantes.
+
+## Dépannage
+
+- **Extensions PHP introuvables** : vérifiez que la version de PHP utilisée par `php` est bien celle configurée et que les DLL requises existent dans son dossier `ext`. `php --ini` affiche le fichier `php.ini` chargé ; `php -m` liste les extensions effectivement activées.
+- **Connexion MySQL refusée** : vérifiez que Docker Desktop est démarré et que `docker compose ps` affiche le conteneur `mysql` en cours d’exécution. La connexion depuis Windows utilise le port `3307`, pas `3306`.
+- **Base ou identifiants incorrects** : assurez-vous que la valeur `DATABASE_URL` dans `.env.local` correspond aux paramètres de `compose.yaml`.
+- **Port déjà utilisé** : libérez le port concerné ou modifiez le port publié dans `compose.yaml`, puis adaptez `DATABASE_URL` si le port MySQL change.
+- **Dépendances incompatibles** : vérifiez que Composer utilise le même PHP 8.4+ que `php -v`, puis relancez `composer install`.
+- **Vérifier la version du framework** : exécutez `php bin/console about` ou `composer show symfony/framework-bundle`. `symfony -v` affiche la version de Symfony CLI.
+
+Pour plus de contexte sur le sujet et les fonctionnalités attendues, voir [`CONSIGNES.md`](CONSIGNES.md).
